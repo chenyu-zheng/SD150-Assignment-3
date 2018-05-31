@@ -6,12 +6,14 @@ describe("App", () => {
         })
     })
 
+
     describe("Button", () => {
         it("has an ID of 'click-me'", () => {
             expect(document.getElementById('click-me').tagName).toBe('BUTTON');
         })
     })
 
+    
     describe("Factorial", () => {
         it("returns the factorial of positive numbers", () => {
             expect(factorial(1)).toBe(1);
@@ -25,51 +27,56 @@ describe("App", () => {
         })
     })
 
+
     describe("Computer", () => {
-        let computerA;
+        let computer;
         beforeEach(() => {
-            computerA = new Computer();
+            computer = new Computer();
         });
 
         afterEach(() => {
-            computerA = undefined;
+            computer = undefined;
         });
 
         it("is created with a hard drive size of 512", () => {
-            expect(computerA.hardDriveSpace).toBe(512);
+            expect(computer.hardDriveSpace).toBe(512);
         });
 
-        describe("installProgram", () => {
-            let computerB;
+
+        describe("installProgram - sufficient space", () => {
             beforeEach((done) => {
-                computerB = new Computer();
-                computerA.installProgram(400, () => {
-                    computerB.installProgram(600, done);
-                });
+                computer.installProgram(400, done);
             });
 
             it("can install a program if there is sufficient space", (done) => {
-                expect(computerA.hardDriveSpace).toBe(112);
-                done();
-            })
-
-            it("is unable to install a program if there is insufficient space", (done) => {
-                expect(computerB.hardDriveSpace).toBe(512);
+                expect(computer.hardDriveSpace).toBe(112);
                 done();
             })
         })
+
+
+        describe("installProgram - insufficient space", () => {
+            beforeEach((done) => {
+                computer.installProgram(600, done);
+            });
+
+            it("is unable to install a program if there is insufficient space", (done) => {
+                expect(computer.hardDriveSpace).toBe(512);
+                done();
+            })
+        })
+
 
         describe("format", () => {
             beforeEach((done) => {
-                computerA.installProgram(300, done);
+                computer.installProgram(300, done);
             });
+
             it("resets the hard drive to 512, even after programs have been installed", (done) => {
-                computerA.format();
-                expect(computerA.hardDriveSpace).toBe(512);
+                computer.format();
+                expect(computer.hardDriveSpace).toBe(512);
                 done();
             });
         })
-
     })
-
 })
